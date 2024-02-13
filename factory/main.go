@@ -10,38 +10,78 @@
 
 package main
 
+import "fmt"
+
 // The shared Interface
 type ICar interface {
 	getName() string
+	setName(name string)
+	getPlate() string
+	setPlate(plate string)
 }
 
 // the Concrete Types
-type SedanCar struct {
-	Name string
-}
 
-type HatchbackCar struct {
-	Name string
+// we define a main base struct
+type Car struct {
+	Name  string
+	Plate string
 }
 
 // Implementing the ICar interface...
-func (s *SedanCar) getName() string {
-	return s.Name
+func (c *Car) getName() string {
+	return c.Name
 }
 
-func (h *HatchbackCar) getName() string {
-	return h.Name
+func (c *Car) setName(name string) {
+	c.Name = name
+}
+
+func (c *Car) getPlate() string {
+	return c.Plate
+}
+
+func (c *Car) setPlate(plate string) {
+	c.Plate = plate
+}
+
+// we indirectly implement ICar through the following concrete structs
+type SedanCar struct {
+	Car
+}
+
+type HatchbackCar struct {
+	Car
+}
+
+// Concrete Factory
+func newKiaK5() ICar {
+	return &SedanCar{
+		Car{
+			Name:  "Kia K5",
+			Plate: "ABCD",
+		},
+	}
+}
+
+func newHyundaiI30() ICar {
+	return &HatchbackCar{
+		Car{
+			Name:  "Hyundai i30",
+			Plate: "EFGH",
+		},
+	}
 }
 
 // The Factory Method...
 func getCar(model string) ICar {
 	var car ICar
 	if model == "sedan" {
-		car = &SedanCar{Name: "Kia K5"}
+		car = newKiaK5()
 	}
 
 	if model == "hatchback" {
-		car = &HatchbackCar{Name: "Hyundai i30"}
+		car = newHyundaiI30()
 	}
 
 	return car
@@ -56,6 +96,6 @@ func main() {
 	car2 := getCar("hatchback")
 
 	println("[CarStore] the following types were created:")
-	println(car1.getName())
-	println(car2.getName())
+	fmt.Printf("Name: %s - Plate: %s\n", car1.getName(), car1.getPlate())
+	fmt.Printf("Name: %s - Plate: %s\n", car2.getName(), car2.getPlate())
 }
