@@ -1,4 +1,4 @@
-// Strategy Patter
+// Strategy Pattern
 // It's a behavioral design pattern that let us create a family of related algorithms, that execute a common task in different ways
 // and make them interchangeble in runtime at a context object
 
